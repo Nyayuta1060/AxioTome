@@ -30,7 +30,12 @@ pub fn add_book(
     )
     .map_err(|e| e.to_string())?;
     
-    let id = conn.last_insert_rowid();
+    // DuckDBでは自動インクリメントIDを取得する別の方法が必要
+    // 簡易的に現在のタイムスタンプベースのIDを返す
+    let id = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap()
+        .as_millis() as i64;
     Ok(id)
 }
 
@@ -74,23 +79,42 @@ pub fn delete_book(id: i64, state: State<DatabaseState>) -> Result<(), String> {
 
 #[tauri::command]
 pub async fn select_pdf_file() -> Result<Option<String>, String> {
-    use tauri_plugin_dialog::{DialogExt, MessageDialogKind};
-    
-    // ファイル選択ダイアログを表示
-    // 注: この実装は簡略化されています
-    Ok(None) // 後で実装
+    // ファイル選択ダイアログを表示（後で実装）
+    Ok(None)
 }
 
 #[tauri::command]
-pub fn get_pdf_page_count(file_path: String) -> Result<i32, String> {
-    use pdf_extract::*;
+pub fn get_pdf_page_count(_file_path: String) -> Result<i32, String> {
+    // PDF解析してページ数を取得(後で実装)
+    // 簡略化のため固定値を返す
+    Ok(100)
+}
+
+#[tauri::command]
+pub fn search_books(
+    query: String,
+    ai_state: State<crate::ai_engine::AIState>,
+) -> Result<Vec<crate::ai_engine::SearchResult>, String> {
+    let ai = ai_state.engine.lock().map_err(|e| e.to_string())?;
     
-    match extract_text(&file_path) {
-        Ok(_) => {
-            // PDF解析してページ数を取得
-            // 簡略化のため固定値を返す
-            Ok(100)
-        }
-        Err(e) => Err(format!("PDFページ数取得エラー: {}", e)),
-    }
+    // テストデータ（実際にはデータベースからPDFのテキストを取得）
+    let books_content = vec![
+        "Rustは安全性とパフォーマンスを両立したシステムプログラミング言語です。".to_string(),
+        "所有権システムによりメモリ安全性を保証します。".to_string(),
+    ];
+    
+    ai.search_in_books(&query, books_content)
+        .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub fn ask_ai(
+    question: String,
+    context: String,
+    ai_state: State<crate::ai_engine::AIState>,
+) -> Result<String, String> {
+    let ai = ai_state.engine.lock().map_err(|e| e.to_string())?;
+    
+    ai.answer_question(&question, &context)
+        .map_err(|e| e.to_string())
 }

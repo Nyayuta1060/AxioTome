@@ -1,5 +1,5 @@
 use anyhow::Result;
-use duckdb::{Connection, params};
+use duckdb::Connection;
 use std::sync::Mutex;
 use tauri::{AppHandle, Manager};
 
