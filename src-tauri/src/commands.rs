@@ -71,3 +71,26 @@ pub fn delete_book(id: i64, state: State<DatabaseState>) -> Result<(), String> {
     
     Ok(())
 }
+
+#[tauri::command]
+pub async fn select_pdf_file() -> Result<Option<String>, String> {
+    use tauri_plugin_dialog::{DialogExt, MessageDialogKind};
+    
+    // ファイル選択ダイアログを表示
+    // 注: この実装は簡略化されています
+    Ok(None) // 後で実装
+}
+
+#[tauri::command]
+pub fn get_pdf_page_count(file_path: String) -> Result<i32, String> {
+    use pdf_extract::*;
+    
+    match extract_text(&file_path) {
+        Ok(_) => {
+            // PDF解析してページ数を取得
+            // 簡略化のため固定値を返す
+            Ok(100)
+        }
+        Err(e) => Err(format!("PDFページ数取得エラー: {}", e)),
+    }
+}

@@ -1,17 +1,18 @@
 import { useState } from "react";
+import Library from "./Library";
+import PDFViewer from "./PDFViewer";
+import { Book } from "./types";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 
   return (
-    <div style={{ padding: "20px", textAlign: "center" }}>
-      <h1>AxioTome - AI搭載PDFライブラリ</h1>
-      <p>技術書の管理と読書支援を行うデスクトップアプリケーション</p>
-      <div style={{ marginTop: "20px" }}>
-        <button onClick={() => setCount((count) => count + 1)}>
-          カウント: {count}
-        </button>
-      </div>
+    <div style={{ width: "100%", height: "100vh", overflow: "hidden" }}>
+      {selectedBook ? (
+        <PDFViewer book={selectedBook} onClose={() => setSelectedBook(null)} />
+      ) : (
+        <Library onSelectBook={setSelectedBook} />
+      )}
     </div>
   );
 }
