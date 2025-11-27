@@ -14,7 +14,7 @@ function Library({ onSelectBook }: LibraryProps) {
     title: "",
     author: "",
     filePath: "",
-    totalPages: 100,
+    totalPages: 0,
   });
 
   useEffect(() => {
@@ -43,11 +43,11 @@ function Library({ onSelectBook }: LibraryProps) {
         newBook.title,
         newBook.author || null,
         newBook.filePath,
-        newBook.totalPages
+        newBook.totalPages > 0 ? newBook.totalPages : undefined
       );
       await loadBooks();
       setShowAddDialog(false);
-      setNewBook({ title: "", author: "", filePath: "", totalPages: 100 });
+      setNewBook({ title: "", author: "", filePath: "", totalPages: 0 });
       alert("書籍を追加しました!");
     } catch (error) {
       console.error("書籍の追加エラー:", error);
@@ -181,11 +181,11 @@ function Library({ onSelectBook }: LibraryProps) {
 
             <div style={{ marginBottom: "20px" }}>
               <label style={{ display: "block", marginBottom: "5px" }}>
-                総ページ数
+                総ページ数 (任意)
               </label>
               <input
                 type="number"
-                value={newBook.totalPages}
+                value={newBook.totalPages || ""}
                 onChange={(e) =>
                   setNewBook({
                     ...newBook,
@@ -200,6 +200,7 @@ function Library({ onSelectBook }: LibraryProps) {
                   borderRadius: "4px",
                   color: "#fff",
                 }}
+                placeholder="不明な場合は空欄"
               />
             </div>
 

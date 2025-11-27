@@ -21,7 +21,7 @@ pub async fn init_database(app_handle: &AppHandle) -> Result<()> {
     // 書籍テーブル作成
     conn.execute(
         "CREATE TABLE IF NOT EXISTS books (
-            id INTEGER PRIMARY KEY,
+            id BIGINT PRIMARY KEY,
             title TEXT NOT NULL,
             author TEXT,
             file_path TEXT NOT NULL,

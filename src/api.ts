@@ -5,13 +5,13 @@ export async function addBook(
   title: string,
   author: string | null,
   filePath: string,
-  totalPages: number
+  totalPages?: number
 ): Promise<number> {
   return await invoke<number>("add_book", {
     title,
     author,
     filePath,
-    totalPages,
+    totalPages: totalPages || null,
   });
 }
 

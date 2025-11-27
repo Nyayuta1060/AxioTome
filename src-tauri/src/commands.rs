@@ -19,23 +19,29 @@ pub fn add_book(
     title: String,
     author: Option<String>,
     file_path: String,
-    total_pages: i32,
+    total_pages: Option<i32>,
     state: State<DatabaseState>,
 ) -> Result<i64, String> {
     let conn = state.conn.lock().map_err(|e| e.to_string())?;
     
+    let pages = total_pages.unwrap_or(0);
+    
+    // シーケンスから次のIDを取得
+    let mut stmt = conn
+        .prepare("SELECT nextval('books_id_seq') as id")
+        .map_err(|e| e.to_string())?;
+    
+    let id: i64 = stmt
+        .query_row([], |row| row.get(0))
+        .map_err(|e| e.to_string())?;
+    
+    // IDを含めてINSERT
     conn.execute(
-        "INSERT INTO books (title, author, file_path, total_pages) VALUES (?, ?, ?, ?)",
-        &[&title, &author.unwrap_or_default(), &file_path, &total_pages.to_string()],
+        "INSERT INTO books (id, title, author, file_path, total_pages) VALUES (?, ?, ?, ?, ?)",
+        &[&id.to_string(), &title, &author.unwrap_or_default(), &file_path, &pages.to_string()],
     )
     .map_err(|e| e.to_string())?;
     
-    // DuckDBでは自動インクリメントIDを取得する別の方法が必要
-    // 簡易的に現在のタイムスタンプベースのIDを返す
-    let id = std::time::SystemTime::now()
-        .duration_since(std::time::UNIX_EPOCH)
-        .unwrap()
-        .as_millis() as i64;
     Ok(id)
 }
 
