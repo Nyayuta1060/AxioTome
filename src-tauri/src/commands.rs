@@ -26,11 +26,11 @@ pub fn add_book(
     
     let pages = total_pages.unwrap_or(0);
     
-    // タイムスタンプベースの一意なIDを生成
+    // 秒単位のタイムスタンプベースのIDを生成（INT32の範囲内）
     let id = std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
         .unwrap()
-        .as_millis() as i64;
+        .as_secs() as i64;
     
     // IDを含めてINSERT
     use duckdb::params;
