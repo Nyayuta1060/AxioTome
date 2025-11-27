@@ -1,6 +1,7 @@
 use anyhow::Result;
 use std::sync::Mutex;
 
+#[allow(dead_code)]
 pub struct AIEngine {
     // AI関連の状態を保持
     initialized: bool,
@@ -13,6 +14,7 @@ impl AIEngine {
         }
     }
 
+    #[allow(dead_code)]
     pub async fn initialize(&mut self) -> Result<()> {
         // Candleモデルの初期化（将来実装）
         self.initialized = true;
@@ -42,6 +44,7 @@ impl AIEngine {
         Ok(results)
     }
 
+    #[allow(dead_code)]
     pub fn summarize_text(&self, text: &str) -> Result<String> {
         // 簡易的な要約機能（後で言語モデルに置き換え）
         let lines: Vec<&str> = text.lines().take(5).collect();
