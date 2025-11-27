@@ -32,11 +32,14 @@ pub fn add_book(
         .unwrap()
         .as_secs() as i64;
     
+    // 現在の日付を取得
+    let now = chrono::Local::now().format("%Y-%m-%d %H:%M:%S").to_string();
+    
     // IDを含めてINSERT
     use duckdb::params;
     conn.execute(
-        "INSERT INTO books (id, title, author, file_path, total_pages) VALUES (?, ?, ?, ?, ?)",
-        params![id, title, author.unwrap_or_default(), file_path, pages],
+        "INSERT INTO books (id, title, author, file_path, total_pages, added_date) VALUES (?, ?, ?, ?, ?, ?)",
+        params![id, title, author.unwrap_or_default(), file_path, pages, now],
     )
     .map_err(|e| format!("書籍追加エラー: {}", e))?;
     
@@ -51,7 +54,7 @@ pub fn get_books(state: State<DatabaseState>) -> Result<Vec<Book>, String> {
     
     let mut stmt = conn
         .prepare("SELECT id, title, author, file_path, added_date, last_read, current_page, total_pages FROM books ORDER BY added_date DESC")
-        .map_err(|e| e.to_string())?;
+        .map_err(|e| format!("SQL準備エラー: {}", e))?;
     
     let books = stmt
         .query_map([], |row| {
@@ -66,9 +69,14 @@ pub fn get_books(state: State<DatabaseState>) -> Result<Vec<Book>, String> {
                 total_pages: row.get(7)?,
             })
         })
-        .map_err(|e| e.to_string())?
+        .map_err(|e| format!("クエリ実行エラー: {}", e))?
         .collect::<Result<Vec<_>, _>>()
-        .map_err(|e| e.to_string())?;
+        .map_err(|e| format!("データ収集エラー: {}", e))?;
+    
+    println!("書籍を{}件取得しました", books.len());
+    for book in &books {
+        println!("  - {} (ID: {:?})", book.title, book.id);
+    }
     
     Ok(books)
 }

@@ -25,8 +25,8 @@ pub async fn init_database(app_handle: &AppHandle) -> Result<()> {
             title TEXT NOT NULL,
             author TEXT,
             file_path TEXT NOT NULL,
-            added_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            last_read TIMESTAMP,
+            added_date VARCHAR,
+            last_read VARCHAR,
             current_page INTEGER DEFAULT 0,
             total_pages INTEGER DEFAULT 0
         )",

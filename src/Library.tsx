@@ -23,10 +23,14 @@ function Library({ onSelectBook }: LibraryProps) {
 
   async function loadBooks() {
     try {
+      console.log("書籍一覧を読み込み中...");
       const result = await getBooks();
+      console.log("取得した書籍:", result);
       setBooks(result);
+      console.log("状態を更新しました。書籍数:", result.length);
     } catch (error) {
       console.error("書籍の読み込みエラー:", error);
+      alert("書籍の読み込みに失敗しました: " + error);
     } finally {
       setLoading(false);
     }
@@ -39,16 +43,22 @@ function Library({ onSelectBook }: LibraryProps) {
     }
 
     try {
-      await addBook(
+      const id = await addBook(
         newBook.title,
         newBook.author || null,
         newBook.filePath,
         newBook.totalPages > 0 ? newBook.totalPages : undefined
       );
-      await loadBooks();
+      console.log("書籍を追加しました。ID:", id);
+      
       setShowAddDialog(false);
       setNewBook({ title: "", author: "", filePath: "", totalPages: 0 });
-      alert("書籍を追加しました!");
+      
+      // 少し待ってからリロード
+      setTimeout(async () => {
+        await loadBooks();
+        console.log("書籍一覧を再読み込みしました");
+      }, 100);
     } catch (error) {
       console.error("書籍の追加エラー:", error);
       alert("書籍の追加に失敗しました: " + error);
@@ -71,18 +81,43 @@ function Library({ onSelectBook }: LibraryProps) {
   }
 
   return (
-    <div style={{ padding: "20px", height: "100vh", overflow: "auto" }}>
+    <div style={{ height: "100vh", overflow: "auto", backgroundColor: "#0f0f0f" }}>
       <div
         style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "20px",
+          padding: "30px 40px",
+          borderBottom: "1px solid #2a2a2a",
+          background: "linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%)",
         }}
       >
-        <h2>ライブラリ</h2>
-        <button onClick={() => setShowAddDialog(true)}>書籍を追加</button>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <h2 style={{ margin: 0, fontSize: "1.8em", fontWeight: 600, letterSpacing: "-0.02em" }}>📚 ライブラリ</h2>
+          <button 
+            onClick={() => setShowAddDialog(true)}
+            style={{
+              padding: "12px 24px",
+              fontSize: "0.95em",
+              fontWeight: 500,
+              backgroundColor: "#3b82f6",
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+              transition: "all 0.2s ease",
+              boxShadow: "0 2px 8px rgba(59, 130, 246, 0.3)",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "#2563eb";
+              e.currentTarget.style.boxShadow = "0 4px 12px rgba(59, 130, 246, 0.4)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "#3b82f6";
+              e.currentTarget.style.boxShadow = "0 2px 8px rgba(59, 130, 246, 0.3)";
+            }}
+          >
+            + 書籍を追加
+          </button>
+        </div>
       </div>
+      <div style={{ padding: "30px 40px" }}>
 
       {/* 書籍追加ダイアログ */}
       {showAddDialog && (
@@ -220,43 +255,84 @@ function Library({ onSelectBook }: LibraryProps) {
       )}
 
       {books.length === 0 ? (
-        <p style={{ color: "#888" }}>書籍がありません。追加してください。</p>
+        <div style={{
+          textAlign: "center",
+          padding: "60px 20px",
+          color: "#666",
+        }}>
+          <div style={{ fontSize: "3em", marginBottom: "20px", opacity: 0.5 }}>📖</div>
+          <p style={{ fontSize: "1.1em", marginBottom: "8px" }}>書籍がまだありません</p>
+          <p style={{ fontSize: "0.9em", color: "#555" }}>「+ 書籍を追加」ボタンから追加してください</p>
+        </div>
       ) : (
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-            gap: "20px",
+            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+            gap: "24px",
           }}
         >
           {books.map((book) => (
             <div
               key={book.id}
               style={{
-                border: "1px solid #444",
-                borderRadius: "8px",
-                padding: "15px",
+                background: "linear-gradient(135deg, #1a1a1a 0%, #161616 100%)",
+                border: "1px solid #2a2a2a",
+                borderRadius: "12px",
+                padding: "20px",
                 cursor: "pointer",
-                transition: "transform 0.2s",
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                position: "relative",
+                overflow: "hidden",
               }}
               onClick={() => onSelectBook(book)}
               onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "scale(1.05)";
+                e.currentTarget.style.transform = "translateY(-4px)";
+                e.currentTarget.style.borderColor = "#3b82f6";
+                e.currentTarget.style.boxShadow = "0 8px 24px rgba(0, 0, 0, 0.5)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.borderColor = "#2a2a2a";
+                e.currentTarget.style.boxShadow = "none";
               }}
             >
-              <h3 style={{ fontSize: "1.1em", marginBottom: "10px" }}>
+              <div style={{
+                position: "absolute",
+                top: 0,
+                right: 0,
+                width: "100px",
+                height: "100px",
+                background: "radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%)",
+                pointerEvents: "none",
+              }} />
+              <h3 style={{ 
+                fontSize: "1.2em", 
+                marginBottom: "12px",
+                fontWeight: 600,
+                lineHeight: 1.3,
+                color: "#e5e5e5",
+              }}>
                 {book.title}
               </h3>
               {book.author && (
-                <p style={{ color: "#aaa", fontSize: "0.9em" }}>
-                  著者: {book.author}
+                <p style={{ 
+                  color: "#888", 
+                  fontSize: "0.9em",
+                  marginBottom: "8px",
+                }}>
+                  👤 {book.author}
                 </p>
               )}
-              <p style={{ color: "#888", fontSize: "0.85em", marginTop: "5px" }}>
-                {book.total_pages}ページ
+              <p style={{ 
+                color: "#666", 
+                fontSize: "0.85em", 
+                marginTop: "8px",
+                display: "flex",
+                alignItems: "center",
+                gap: "4px",
+              }}>
+                📄 {book.total_pages > 0 ? `${book.total_pages}ページ` : "ページ数不明"}
               </p>
               <button
                 onClick={(e) => {
@@ -264,17 +340,33 @@ function Library({ onSelectBook }: LibraryProps) {
                   handleDeleteBook(book.id!);
                 }}
                 style={{
-                  marginTop: "10px",
-                  backgroundColor: "#d44",
+                  marginTop: "16px",
+                  padding: "8px 16px",
+                  backgroundColor: "transparent",
+                  border: "1px solid #ef4444",
+                  color: "#ef4444",
                   fontSize: "0.85em",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                  width: "100%",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "#ef4444";
+                  e.currentTarget.style.color = "#fff";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "transparent";
+                  e.currentTarget.style.color = "#ef4444";
                 }}
               >
-                削除
+                🗑️ 削除
               </button>
             </div>
           ))}
         </div>
       )}
+      </div>
     </div>
   );
 }

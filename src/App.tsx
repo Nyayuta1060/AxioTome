@@ -21,16 +21,30 @@ function App() {
       <nav
         style={{
           display: "flex",
-          gap: "10px",
-          padding: "10px 20px",
-          backgroundColor: "#2a2a2a",
-          borderBottom: "1px solid #444",
+          gap: "0",
+          padding: "0",
+          backgroundColor: "#0f0f0f",
+          borderBottom: "1px solid #2a2a2a",
         }}
       >
         <button
           onClick={() => setViewMode("library")}
           style={{
-            backgroundColor: viewMode === "library" ? "#646cff" : "#1a1a1a",
+            padding: "16px 32px",
+            backgroundColor: "transparent",
+            border: "none",
+            borderBottom: viewMode === "library" ? "2px solid #3b82f6" : "2px solid transparent",
+            color: viewMode === "library" ? "#3b82f6" : "#888",
+            fontSize: "0.95em",
+            fontWeight: 500,
+            cursor: "pointer",
+            transition: "all 0.2s ease",
+          }}
+          onMouseEnter={(e) => {
+            if (viewMode !== "library") e.currentTarget.style.color = "#aaa";
+          }}
+          onMouseLeave={(e) => {
+            if (viewMode !== "library") e.currentTarget.style.color = "#888";
           }}
         >
           📚 ライブラリ
@@ -38,7 +52,21 @@ function App() {
         <button
           onClick={() => setViewMode("ai")}
           style={{
-            backgroundColor: viewMode === "ai" ? "#646cff" : "#1a1a1a",
+            padding: "16px 32px",
+            backgroundColor: "transparent",
+            border: "none",
+            borderBottom: viewMode === "ai" ? "2px solid #3b82f6" : "2px solid transparent",
+            color: viewMode === "ai" ? "#3b82f6" : "#888",
+            fontSize: "0.95em",
+            fontWeight: 500,
+            cursor: "pointer",
+            transition: "all 0.2s ease",
+          }}
+          onMouseEnter={(e) => {
+            if (viewMode !== "ai") e.currentTarget.style.color = "#aaa";
+          }}
+          onMouseLeave={(e) => {
+            if (viewMode !== "ai") e.currentTarget.style.color = "#888";
           }}
         >
           🤖 AIアシスタント
