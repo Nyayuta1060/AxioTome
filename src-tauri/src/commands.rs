@@ -26,21 +26,21 @@ pub fn add_book(
     
     let pages = total_pages.unwrap_or(0);
     
-    // シーケンスから次のIDを取得
-    let mut stmt = conn
-        .prepare("SELECT nextval('books_id_seq') as id")
-        .map_err(|e| e.to_string())?;
-    
-    let id: i64 = stmt
-        .query_row([], |row| row.get(0))
-        .map_err(|e| e.to_string())?;
+    // タイムスタンプベースの一意なIDを生成
+    let id = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap()
+        .as_millis() as i64;
     
     // IDを含めてINSERT
+    use duckdb::params;
     conn.execute(
         "INSERT INTO books (id, title, author, file_path, total_pages) VALUES (?, ?, ?, ?, ?)",
-        &[&id.to_string(), &title, &author.unwrap_or_default(), &file_path, &pages.to_string()],
+        params![id, title, author.unwrap_or_default(), file_path, pages],
     )
-    .map_err(|e| e.to_string())?;
+    .map_err(|e| format!("書籍追加エラー: {}", e))?;
+    
+    println!("書籍を追加しました: id={}, title={}", id, title);
     
     Ok(id)
 }
@@ -77,7 +77,8 @@ pub fn get_books(state: State<DatabaseState>) -> Result<Vec<Book>, String> {
 pub fn delete_book(id: i64, state: State<DatabaseState>) -> Result<(), String> {
     let conn = state.conn.lock().map_err(|e| e.to_string())?;
     
-    conn.execute("DELETE FROM books WHERE id = ?", &[&id.to_string()])
+    use duckdb::params;
+    conn.execute("DELETE FROM books WHERE id = ?", params![id])
         .map_err(|e| e.to_string())?;
     
     Ok(())
