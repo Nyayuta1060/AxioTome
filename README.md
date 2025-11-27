@@ -63,7 +63,27 @@ AxioTome は、技術書の PDF を管理し、AI 技術を活用した読書支
 - Rust 1.70 以上
 - npm または pnpm
 
-### インストール
+### Linux 環境でのセットアップ
+
+```bash
+# システム依存ライブラリのインストール (Ubuntu/Debian)
+sudo apt-get update
+sudo apt-get install -y libwebkit2gtk-4.1-dev \
+    libgtk-3-dev \
+    libayatana-appindicator3-dev \
+    librsvg2-dev
+
+# 依存関係のインストール
+npm install
+
+# 開発サーバーの起動
+npm run tauri:dev
+
+# リリースビルド
+npm run tauri:build
+```
+
+### Windows 環境でのセットアップ
 
 ```bash
 # 依存関係のインストール
@@ -71,9 +91,6 @@ npm install
 
 # 開発サーバーの起動
 npm run tauri:dev
-
-# ビルド
-npm run tauri:build
 ```
 
 ## プロジェクト構造
@@ -97,16 +114,41 @@ AxioTome/
 └── package.json           # Node.js依存関係
 ```
 
+## 使い方
+
+1. **アプリケーションを起動**: `npm run tauri:dev`
+2. **書籍を追加**: ライブラリ画面で「書籍を追加」ボタンをクリック
+3. **PDF 閲覧**: 追加した書籍をクリックして閲覧
+4. **AI 検索**: AI アシスタントタブで横断検索や質問を実行
+
 ## 開発ロードマップ
 
 1. ✅ プロジェクト基盤構築
 2. ✅ 基本 UI 実装
-3. ✅ データベース統合
+3. ✅ データベース統合 (DuckDB)
 4. ✅ AI 機能の骨組み
 5. 🔄 PDF レンダリングの完全実装
 6. 🔄 Candle による高度な AI 機能
 7. ⏳ ベクトル検索・埋め込み機能
 8. ⏳ ユーザー設定・カスタマイズ
+
+## トラブルシューティング
+
+### ビルドエラー: GTK 関連のライブラリが見つからない
+
+Linux 環境でビルドする場合、以下のパッケージが必要です:
+
+```bash
+sudo apt-get install libwebkit2gtk-4.1-dev libgtk-3-dev \
+    libayatana-appindicator3-dev librsvg2-dev
+```
+
+### データベースファイルの場所
+
+アプリケーションデータは以下に保存されます:
+
+- Linux: `~/.local/share/com.axiotome.app/`
+- Windows: `%APPDATA%\com.axiotome.app\`
 
 ## ライセンス
 

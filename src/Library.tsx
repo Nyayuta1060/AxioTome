@@ -9,6 +9,13 @@ interface LibraryProps {
 function Library({ onSelectBook }: LibraryProps) {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showAddDialog, setShowAddDialog] = useState(false);
+  const [newBook, setNewBook] = useState({
+    title: "",
+    author: "",
+    filePath: "",
+    totalPages: 100,
+  });
 
   useEffect(() => {
     loadBooks();
@@ -26,13 +33,25 @@ function Library({ onSelectBook }: LibraryProps) {
   }
 
   async function handleAddBook() {
-    // TODO: ファイル選択ダイアログの実装
-    // 現在はテストデータを追加
+    if (!newBook.title || !newBook.filePath) {
+      alert("タイトルとファイルパスを入力してください");
+      return;
+    }
+
     try {
-      await addBook("サンプル技術書", "著者名", "/path/to/sample.pdf", 300);
+      await addBook(
+        newBook.title,
+        newBook.author || null,
+        newBook.filePath,
+        newBook.totalPages
+      );
       await loadBooks();
+      setShowAddDialog(false);
+      setNewBook({ title: "", author: "", filePath: "", totalPages: 100 });
+      alert("書籍を追加しました!");
     } catch (error) {
       console.error("書籍の追加エラー:", error);
+      alert("書籍の追加に失敗しました: " + error);
     }
   }
 
@@ -62,8 +81,142 @@ function Library({ onSelectBook }: LibraryProps) {
         }}
       >
         <h2>ライブラリ</h2>
-        <button onClick={handleAddBook}>書籍を追加</button>
+        <button onClick={() => setShowAddDialog(true)}>書籍を追加</button>
       </div>
+
+      {/* 書籍追加ダイアログ */}
+      {showAddDialog && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.7)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1000,
+          }}
+          onClick={() => setShowAddDialog(false)}
+        >
+          <div
+            style={{
+              backgroundColor: "#2a2a2a",
+              padding: "30px",
+              borderRadius: "8px",
+              minWidth: "400px",
+              maxWidth: "500px",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 style={{ marginBottom: "20px" }}>書籍を追加</h3>
+
+            <div style={{ marginBottom: "15px" }}>
+              <label style={{ display: "block", marginBottom: "5px" }}>
+                タイトル *
+              </label>
+              <input
+                type="text"
+                value={newBook.title}
+                onChange={(e) =>
+                  setNewBook({ ...newBook, title: e.target.value })
+                }
+                style={{
+                  width: "100%",
+                  padding: "8px",
+                  backgroundColor: "#1a1a1a",
+                  border: "1px solid #444",
+                  borderRadius: "4px",
+                  color: "#fff",
+                }}
+                placeholder="例: Rustプログラミング入門"
+              />
+            </div>
+
+            <div style={{ marginBottom: "15px" }}>
+              <label style={{ display: "block", marginBottom: "5px" }}>
+                著者
+              </label>
+              <input
+                type="text"
+                value={newBook.author}
+                onChange={(e) =>
+                  setNewBook({ ...newBook, author: e.target.value })
+                }
+                style={{
+                  width: "100%",
+                  padding: "8px",
+                  backgroundColor: "#1a1a1a",
+                  border: "1px solid #444",
+                  borderRadius: "4px",
+                  color: "#fff",
+                }}
+                placeholder="例: 山田太郎"
+              />
+            </div>
+
+            <div style={{ marginBottom: "15px" }}>
+              <label style={{ display: "block", marginBottom: "5px" }}>
+                ファイルパス *
+              </label>
+              <input
+                type="text"
+                value={newBook.filePath}
+                onChange={(e) =>
+                  setNewBook({ ...newBook, filePath: e.target.value })
+                }
+                style={{
+                  width: "100%",
+                  padding: "8px",
+                  backgroundColor: "#1a1a1a",
+                  border: "1px solid #444",
+                  borderRadius: "4px",
+                  color: "#fff",
+                }}
+                placeholder="例: /home/user/books/rust.pdf"
+              />
+            </div>
+
+            <div style={{ marginBottom: "20px" }}>
+              <label style={{ display: "block", marginBottom: "5px" }}>
+                総ページ数
+              </label>
+              <input
+                type="number"
+                value={newBook.totalPages}
+                onChange={(e) =>
+                  setNewBook({
+                    ...newBook,
+                    totalPages: parseInt(e.target.value) || 0,
+                  })
+                }
+                style={{
+                  width: "100%",
+                  padding: "8px",
+                  backgroundColor: "#1a1a1a",
+                  border: "1px solid #444",
+                  borderRadius: "4px",
+                  color: "#fff",
+                }}
+              />
+            </div>
+
+            <div style={{ display: "flex", gap: "10px", justifyContent: "flex-end" }}>
+              <button
+                onClick={() => setShowAddDialog(false)}
+                style={{ backgroundColor: "#444" }}
+              >
+                キャンセル
+              </button>
+              <button onClick={handleAddBook} style={{ backgroundColor: "#646cff" }}>
+                追加
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {books.length === 0 ? (
         <p style={{ color: "#888" }}>書籍がありません。追加してください。</p>
