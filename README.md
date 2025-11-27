@@ -150,10 +150,6 @@ sudo apt-get install libwebkit2gtk-4.1-dev libgtk-3-dev \
 - Linux: `~/.local/share/com.axiotome.app/`
 - Windows: `%APPDATA%\com.axiotome.app\`
 
-## ライセンス
-
-MIT
-
 ## 貢献
 
 プルリクエスト、Issue 報告を歓迎します。

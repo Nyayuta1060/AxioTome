@@ -16,60 +16,58 @@ function App() {
   }
 
   return (
-    <div style={{ width: "100%", height: "100vh", display: "flex", flexDirection: "column" }}>
+    <div style={{ width: "100%", height: "100vh", display: "flex", flexDirection: "column", backgroundColor: "#0d1117" }}>
       {/* ナビゲーションバー */}
       <nav
         style={{
           display: "flex",
-          gap: "0",
-          padding: "0",
-          backgroundColor: "#0f0f0f",
-          borderBottom: "1px solid #2a2a2a",
+          gap: "4px",
+          padding: "8px 16px",
+          backgroundColor: "#161b22",
+          borderBottom: "1px solid #30363d",
+          alignItems: "center",
         }}
       >
+        <div style={{ 
+          marginRight: "24px", 
+          fontSize: "1.1em", 
+          fontWeight: 700,
+          color: "#58a6ff",
+          letterSpacing: "-0.5px",
+        }}>
+          AxioTome
+        </div>
         <button
           onClick={() => setViewMode("library")}
           style={{
-            padding: "16px 32px",
-            backgroundColor: "transparent",
-            border: "none",
-            borderBottom: viewMode === "library" ? "2px solid #3b82f6" : "2px solid transparent",
-            color: viewMode === "library" ? "#3b82f6" : "#888",
-            fontSize: "0.95em",
+            padding: "6px 16px",
+            backgroundColor: viewMode === "library" ? "#21262d" : "transparent",
+            border: "1px solid",
+            borderColor: viewMode === "library" ? "#30363d" : "transparent",
+            color: viewMode === "library" ? "#c9d1d9" : "#8b949e",
+            fontSize: "0.875em",
             fontWeight: 500,
             cursor: "pointer",
-            transition: "all 0.2s ease",
-          }}
-          onMouseEnter={(e) => {
-            if (viewMode !== "library") e.currentTarget.style.color = "#aaa";
-          }}
-          onMouseLeave={(e) => {
-            if (viewMode !== "library") e.currentTarget.style.color = "#888";
+            borderRadius: "6px",
           }}
         >
-          📚 ライブラリ
+          Library
         </button>
         <button
           onClick={() => setViewMode("ai")}
           style={{
-            padding: "16px 32px",
-            backgroundColor: "transparent",
-            border: "none",
-            borderBottom: viewMode === "ai" ? "2px solid #3b82f6" : "2px solid transparent",
-            color: viewMode === "ai" ? "#3b82f6" : "#888",
-            fontSize: "0.95em",
+            padding: "6px 16px",
+            backgroundColor: viewMode === "ai" ? "#21262d" : "transparent",
+            border: "1px solid",
+            borderColor: viewMode === "ai" ? "#30363d" : "transparent",
+            color: viewMode === "ai" ? "#c9d1d9" : "#8b949e",
+            fontSize: "0.875em",
             fontWeight: 500,
             cursor: "pointer",
-            transition: "all 0.2s ease",
-          }}
-          onMouseEnter={(e) => {
-            if (viewMode !== "ai") e.currentTarget.style.color = "#aaa";
-          }}
-          onMouseLeave={(e) => {
-            if (viewMode !== "ai") e.currentTarget.style.color = "#888";
+            borderRadius: "6px",
           }}
         >
-          🤖 AIアシスタント
+          AI Mode
         </button>
       </nav>
 

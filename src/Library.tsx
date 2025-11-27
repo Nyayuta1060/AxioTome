@@ -81,43 +81,48 @@ function Library({ onSelectBook }: LibraryProps) {
   }
 
   return (
-    <div style={{ height: "100vh", overflow: "auto", backgroundColor: "#0f0f0f" }}>
+    <div style={{ height: "100vh", overflow: "auto", backgroundColor: "#0d1117" }}>
       <div
         style={{
-          padding: "30px 40px",
-          borderBottom: "1px solid #2a2a2a",
-          background: "linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%)",
+          padding: "20px 24px",
+          borderBottom: "1px solid #21262d",
+          backgroundColor: "#0d1117",
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <h2 style={{ margin: 0, fontSize: "1.8em", fontWeight: 600, letterSpacing: "-0.02em" }}>📚 ライブラリ</h2>
+          <h2 style={{ 
+            margin: 0, 
+            fontSize: "1.25em", 
+            fontWeight: 600, 
+            color: "#c9d1d9",
+            letterSpacing: "-0.3px",
+          }}>
+            Books
+          </h2>
           <button 
             onClick={() => setShowAddDialog(true)}
             style={{
-              padding: "12px 24px",
-              fontSize: "0.95em",
+              padding: "8px 16px",
+              fontSize: "0.875em",
               fontWeight: 500,
-              backgroundColor: "#3b82f6",
-              border: "none",
-              borderRadius: "8px",
+              backgroundColor: "#238636",
+              color: "#ffffff",
+              border: "1px solid rgba(240, 246, 252, 0.1)",
+              borderRadius: "6px",
               cursor: "pointer",
-              transition: "all 0.2s ease",
-              boxShadow: "0 2px 8px rgba(59, 130, 246, 0.3)",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#2563eb";
-              e.currentTarget.style.boxShadow = "0 4px 12px rgba(59, 130, 246, 0.4)";
+              e.currentTarget.style.backgroundColor = "#2ea043";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "#3b82f6";
-              e.currentTarget.style.boxShadow = "0 2px 8px rgba(59, 130, 246, 0.3)";
+              e.currentTarget.style.backgroundColor = "#238636";
             }}
           >
-            + 書籍を追加
+            New Book
           </button>
         </div>
       </div>
-      <div style={{ padding: "30px 40px" }}>
+      <div style={{ padding: "24px" }}>
 
       {/* 書籍追加ダイアログ */}
       {showAddDialog && (
@@ -128,7 +133,8 @@ function Library({ onSelectBook }: LibraryProps) {
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.7)",
+            backgroundColor: "rgba(0, 0, 0, 0.6)",
+            backdropFilter: "blur(3px)",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -138,19 +144,21 @@ function Library({ onSelectBook }: LibraryProps) {
         >
           <div
             style={{
-              backgroundColor: "#2a2a2a",
-              padding: "30px",
-              borderRadius: "8px",
+              backgroundColor: "#161b22",
+              border: "1px solid #30363d",
+              padding: "24px",
+              borderRadius: "6px",
               minWidth: "400px",
-              maxWidth: "500px",
+              maxWidth: "480px",
+              boxShadow: "0 16px 32px rgba(0, 0, 0, 0.7)",
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 style={{ marginBottom: "20px" }}>書籍を追加</h3>
+            <h3 style={{ marginBottom: "20px", fontSize: "1.1em", fontWeight: 600, color: "#c9d1d9" }}>Add New Book</h3>
 
-            <div style={{ marginBottom: "15px" }}>
-              <label style={{ display: "block", marginBottom: "5px" }}>
-                タイトル *
+            <div style={{ marginBottom: "14px" }}>
+              <label style={{ display: "block", marginBottom: "6px", fontSize: "0.85em", color: "#8b949e" }}>
+                Title *
               </label>
               <input
                 type="text"
@@ -160,19 +168,20 @@ function Library({ onSelectBook }: LibraryProps) {
                 }
                 style={{
                   width: "100%",
-                  padding: "8px",
-                  backgroundColor: "#1a1a1a",
-                  border: "1px solid #444",
-                  borderRadius: "4px",
-                  color: "#fff",
+                  padding: "8px 12px",
+                  backgroundColor: "#0d1117",
+                  border: "1px solid #30363d",
+                  borderRadius: "6px",
+                  color: "#c9d1d9",
+                  fontSize: "0.9em",
                 }}
-                placeholder="例: Rustプログラミング入門"
+                placeholder="Enter book title"
               />
             </div>
 
-            <div style={{ marginBottom: "15px" }}>
-              <label style={{ display: "block", marginBottom: "5px" }}>
-                著者
+            <div style={{ marginBottom: "14px" }}>
+              <label style={{ display: "block", marginBottom: "6px", fontSize: "0.85em", color: "#8b949e" }}>
+                Author
               </label>
               <input
                 type="text"
@@ -182,13 +191,14 @@ function Library({ onSelectBook }: LibraryProps) {
                 }
                 style={{
                   width: "100%",
-                  padding: "8px",
-                  backgroundColor: "#1a1a1a",
-                  border: "1px solid #444",
-                  borderRadius: "4px",
-                  color: "#fff",
+                  padding: "8px 12px",
+                  backgroundColor: "#0d1117",
+                  border: "1px solid #30363d",
+                  borderRadius: "6px",
+                  color: "#c9d1d9",
+                  fontSize: "0.9em",
                 }}
-                placeholder="例: 山田太郎"
+                placeholder="Optional"
               />
             </div>
 
@@ -257,110 +267,96 @@ function Library({ onSelectBook }: LibraryProps) {
       {books.length === 0 ? (
         <div style={{
           textAlign: "center",
-          padding: "60px 20px",
-          color: "#666",
+          padding: "80px 20px",
+          color: "#8b949e",
         }}>
-          <div style={{ fontSize: "3em", marginBottom: "20px", opacity: 0.5 }}>📖</div>
-          <p style={{ fontSize: "1.1em", marginBottom: "8px" }}>書籍がまだありません</p>
-          <p style={{ fontSize: "0.9em", color: "#555" }}>「+ 書籍を追加」ボタンから追加してください</p>
+          <div style={{ fontSize: "2.5em", marginBottom: "16px", opacity: 0.4 }}>•••</div>
+          <p style={{ fontSize: "0.95em", marginBottom: "6px", color: "#c9d1d9" }}>No books yet</p>
+          <p style={{ fontSize: "0.85em", color: "#8b949e" }}>Click "New Book" to add your first book</p>
         </div>
       ) : (
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-            gap: "24px",
+            gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+            gap: "16px",
           }}
         >
           {books.map((book) => (
             <div
               key={book.id}
               style={{
-                background: "linear-gradient(135deg, #1a1a1a 0%, #161616 100%)",
-                border: "1px solid #2a2a2a",
-                borderRadius: "12px",
-                padding: "20px",
+                backgroundColor: "#161b22",
+                border: "1px solid #30363d",
+                borderRadius: "6px",
+                padding: "16px",
                 cursor: "pointer",
-                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                position: "relative",
-                overflow: "hidden",
+                transition: "all 0.2s ease",
               }}
               onClick={() => onSelectBook(book)}
               onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-4px)";
-                e.currentTarget.style.borderColor = "#3b82f6";
-                e.currentTarget.style.boxShadow = "0 8px 24px rgba(0, 0, 0, 0.5)";
+                e.currentTarget.style.backgroundColor = "#1c2128";
+                e.currentTarget.style.borderColor = "#58a6ff";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.borderColor = "#2a2a2a";
-                e.currentTarget.style.boxShadow = "none";
+                e.currentTarget.style.backgroundColor = "#161b22";
+                e.currentTarget.style.borderColor = "#30363d";
               }}
             >
-              <div style={{
-                position: "absolute",
-                top: 0,
-                right: 0,
-                width: "100px",
-                height: "100px",
-                background: "radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%)",
-                pointerEvents: "none",
-              }} />
               <h3 style={{ 
-                fontSize: "1.2em", 
-                marginBottom: "12px",
+                fontSize: "1em", 
+                marginBottom: "8px",
                 fontWeight: 600,
-                lineHeight: 1.3,
-                color: "#e5e5e5",
+                color: "#c9d1d9",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
               }}>
                 {book.title}
               </h3>
-              {book.author && (
+              <div style={{ display: "flex", flexDirection: "column", gap: "4px", marginBottom: "12px" }}>
+                {book.author && (
+                  <p style={{ 
+                    color: "#8b949e", 
+                    fontSize: "0.85em",
+                  }}>
+                    by {book.author}
+                  </p>
+                )}
                 <p style={{ 
-                  color: "#888", 
-                  fontSize: "0.9em",
-                  marginBottom: "8px",
+                  color: "#8b949e", 
+                  fontSize: "0.8em",
                 }}>
-                  👤 {book.author}
+                  {book.total_pages > 0 ? `${book.total_pages} pages` : "Unknown pages"}
                 </p>
-              )}
-              <p style={{ 
-                color: "#666", 
-                fontSize: "0.85em", 
-                marginTop: "8px",
-                display: "flex",
-                alignItems: "center",
-                gap: "4px",
-              }}>
-                📄 {book.total_pages > 0 ? `${book.total_pages}ページ` : "ページ数不明"}
-              </p>
+              </div>
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   handleDeleteBook(book.id!);
                 }}
                 style={{
-                  marginTop: "16px",
-                  padding: "8px 16px",
+                  padding: "5px 12px",
                   backgroundColor: "transparent",
-                  border: "1px solid #ef4444",
-                  color: "#ef4444",
-                  fontSize: "0.85em",
+                  border: "1px solid #f85149",
+                  color: "#f85149",
+                  fontSize: "0.8em",
                   borderRadius: "6px",
                   cursor: "pointer",
-                  transition: "all 0.2s ease",
                   width: "100%",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "#ef4444";
-                  e.currentTarget.style.color = "#fff";
+                  e.currentTarget.style.backgroundColor = "#da3633";
+                  e.currentTarget.style.borderColor = "#da3633";
+                  e.currentTarget.style.color = "#ffffff";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = "transparent";
-                  e.currentTarget.style.color = "#ef4444";
+                  e.currentTarget.style.borderColor = "#f85149";
+                  e.currentTarget.style.color = "#f85149";
                 }}
               >
-                🗑️ 削除
+                Delete
               </button>
             </div>
           ))}

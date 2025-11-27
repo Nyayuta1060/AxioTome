@@ -1,11 +1,11 @@
 :root {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-  line-height: 1.6;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Monaco', monospace;
+  line-height: 1.5;
   font-weight: 400;
 
   color-scheme: dark;
-  color: rgba(255, 255, 255, 0.9);
-  background-color: #0f0f0f;
+  color: #c9d1d9;
+  background-color: #0d1117;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -21,10 +21,9 @@
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: #0d1117;
 }
 
 #root {
@@ -33,22 +32,33 @@ body {
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
+  border-radius: 6px;
+  border: 1px solid rgba(240, 246, 252, 0.1);
+  padding: 0.5em 1em;
+  font-size: 0.9em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #21262d;
+  color: #c9d1d9;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: all 0.2s cubic-bezier(0.3, 0, 0.5, 1);
 }
 
 button:hover {
-  border-color: #646cff;
+  background-color: #30363d;
+  border-color: rgba(240, 246, 252, 0.2);
+}
+
+button:active {
+  background-color: #161b22;
 }
 
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 2px solid #58a6ff;
+  outline-offset: 2px;
+}
+
+input {
+  font-family: inherit;
 }

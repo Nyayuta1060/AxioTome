@@ -47,132 +47,171 @@ function AIAssistant() {
   }
 
   return (
-    <div style={{ padding: "20px", maxWidth: "800px", margin: "0 auto" }}>
-      <h2 style={{ marginBottom: "20px" }}>🤖 AI読書アシスタント</h2>
+    <div style={{ height: "100vh", display: "flex", flexDirection: "column", backgroundColor: "#0d1117" }}>
+      <div style={{ padding: "20px 24px", borderBottom: "1px solid #21262d" }}>
+        <h2 style={{ margin: 0, fontSize: "1.25em", fontWeight: 600, color: "#c9d1d9", letterSpacing: "-0.3px" }}>AI Assistant</h2>
+        <p style={{ marginTop: "4px", color: "#8b949e", fontSize: "0.85em" }}>Search and analyze your book collection</p>
+      </div>
 
-      {/* 検索セクション */}
-      <div style={{ marginBottom: "30px" }}>
-        <h3 style={{ fontSize: "1.1em", marginBottom: "10px" }}>
-          📚 書籍横断検索
-        </h3>
-        <div style={{ display: "flex", gap: "10px" }}>
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-            placeholder="検索キーワードを入力..."
-            style={{
-              flex: 1,
-              padding: "10px",
-              backgroundColor: "#2a2a2a",
-              border: "1px solid #444",
-              borderRadius: "4px",
-              color: "#fff",
-            }}
-          />
-          <button onClick={handleSearch} disabled={loading}>
-            {loading ? "検索中..." : "検索"}
-          </button>
-        </div>
-
-        {searchResults.length > 0 && (
-          <div
-            style={{
-              marginTop: "15px",
-              maxHeight: "200px",
-              overflowY: "auto",
-              backgroundColor: "#1a1a1a",
-              border: "1px solid #444",
-              borderRadius: "4px",
-              padding: "10px",
-            }}
-          >
-            <p style={{ marginBottom: "10px", color: "#aaa" }}>
-              {searchResults.length}件の結果が見つかりました
-            </p>
-            {searchResults.map((result, idx) => (
-              <div
-                key={idx}
+      <div style={{ flex: 1, overflow: "auto", padding: "24px" }}>
+        <div style={{ maxWidth: "900px", margin: "0 auto" }}>
+          {/* 検索セクション */}
+          <div style={{ marginBottom: "30px" }}>
+            <h3 style={{ fontSize: "1em", marginBottom: "12px", color: "#c9d1d9", fontWeight: 600 }}>
+              Search Books
+            </h3>
+            <div style={{ display: "flex", gap: "10px" }}>
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+                placeholder="Type keyword..."
                 style={{
-                  padding: "8px",
-                  marginBottom: "8px",
-                  backgroundColor: "#2a2a2a",
-                  borderRadius: "4px",
+                  flex: 1,
+                  padding: "8px 12px",
+                  backgroundColor: "#0d1117",
+                  border: "1px solid #30363d",
+                  borderRadius: "6px",
+                  color: "#c9d1d9",
                   fontSize: "0.9em",
+                  fontFamily: "'JetBrains Mono', monospace",
+                }}
+              />
+              <button 
+                onClick={handleSearch} 
+                disabled={loading}
+                style={{
+                  padding: "8px 16px",
+                  fontSize: "0.875em",
+                  fontWeight: 500,
+                  backgroundColor: "#1f6feb",
+                  color: "#ffffff",
+                  border: "1px solid rgba(240, 246, 252, 0.1)",
+                  borderRadius: "6px",
+                  cursor: "pointer",
                 }}
               >
-                <span style={{ color: "#888" }}>
-                  書籍 {result.book_index + 1} / 行 {result.line_number + 1}
-                </span>
-                <p style={{ marginTop: "5px" }}>{result.context}</p>
+                {loading ? "Searching..." : "Search"}
+              </button>
+            </div>
+
+            {searchResults.length > 0 && (
+              <div
+                style={{
+                  marginTop: "12px",
+                  maxHeight: "250px",
+                  overflowY: "auto",
+                  backgroundColor: "#161b22",
+                  border: "1px solid #30363d",
+                  borderRadius: "6px",
+                  padding: "12px",
+                }}
+              >
+                <p style={{ marginBottom: "10px", color: "#8b949e", fontSize: "0.85em" }}>
+                  {searchResults.length} results found
+                </p>
+                {searchResults.map((result, idx) => (
+                  <div
+                    key={idx}
+                    style={{
+                      padding: "10px",
+                      marginBottom: "8px",
+                      backgroundColor: "#0d1117",
+                      border: "1px solid #21262d",
+                      borderRadius: "6px",
+                      fontSize: "0.85em",
+                    }}
+                  >
+                    <span style={{ color: "#8b949e", fontFamily: "'JetBrains Mono', monospace" }}>
+                      Book {result.book_index + 1} / Line {result.line_number + 1}
+                    </span>
+                    <p style={{ marginTop: "6px", color: "#c9d1d9" }}>{result.context}</p>
+                  </div>
+                ))}
               </div>
-            ))}
+            )}
           </div>
-        )}
-      </div>
 
-      {/* AI質問セクション */}
-      <div>
-        <h3 style={{ fontSize: "1.1em", marginBottom: "10px" }}>
-          💬 AIに質問する
-        </h3>
-        <div style={{ display: "flex", gap: "10px", marginBottom: "15px" }}>
-          <input
-            type="text"
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && handleAskAI()}
-            placeholder="質問を入力..."
-            style={{
-              flex: 1,
-              padding: "10px",
-              backgroundColor: "#2a2a2a",
-              border: "1px solid #444",
-              borderRadius: "4px",
-              color: "#fff",
-            }}
-          />
-          <button onClick={handleAskAI} disabled={loading}>
-            {loading ? "処理中..." : "質問"}
-          </button>
-        </div>
+          {/* AI質問セクション */}
+          <div>
+            <h3 style={{ fontSize: "1em", marginBottom: "12px", color: "#c9d1d9", fontWeight: 600 }}>
+              Ask AI
+            </h3>
+            <div style={{ display: "flex", gap: "10px", marginBottom: "15px" }}>
+              <input
+                type="text"
+                value={question}
+                onChange={(e) => setQuestion(e.target.value)}
+                onKeyPress={(e) => e.key === "Enter" && handleAskAI()}
+                placeholder="Type your question..."
+                style={{
+                  flex: 1,
+                  padding: "8px 12px",
+                  backgroundColor: "#0d1117",
+                  border: "1px solid #30363d",
+                  borderRadius: "6px",
+                  color: "#c9d1d9",
+                  fontSize: "0.9em",
+                  fontFamily: "'JetBrains Mono', monospace",
+                }}
+              />
+              <button 
+                onClick={handleAskAI} 
+                disabled={loading}
+                style={{
+                  padding: "8px 16px",
+                  fontSize: "0.875em",
+                  fontWeight: 500,
+                  backgroundColor: "#238636",
+                  color: "#ffffff",
+                  border: "1px solid rgba(240, 246, 252, 0.1)",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                }}
+              >
+                {loading ? "Processing..." : "Ask"}
+              </button>
+            </div>
 
-        {aiAnswer && (
+            {aiAnswer && (
+              <div
+                style={{
+                  padding: "12px",
+                  backgroundColor: "#161b22",
+                  border: "1px solid #30363d",
+                  borderRadius: "6px",
+                }}
+              >
+                <p style={{ color: "#8b949e", fontSize: "0.85em", marginBottom: "8px", fontFamily: "'JetBrains Mono', monospace" }}>
+                  $ AI Response:
+                </p>
+                <p style={{ whiteSpace: "pre-wrap", color: "#c9d1d9", fontSize: "0.9em" }}>{aiAnswer}</p>
+              </div>
+            )}
+          </div>
+
           <div
             style={{
-              padding: "15px",
-              backgroundColor: "#1a1a1a",
-              border: "1px solid #444",
-              borderRadius: "4px",
+              marginTop: "30px",
+              padding: "12px",
+              backgroundColor: "#161b22",
+              border: "1px solid #30363d",
+              borderRadius: "6px",
+              fontSize: "0.85em",
+              color: "#8b949e",
             }}
           >
-            <p style={{ color: "#aaa", fontSize: "0.9em", marginBottom: "8px" }}>
-              AIの回答:
+            <p style={{ marginBottom: "8px", color: "#c9d1d9" }}>
+              <strong>Features</strong>
             </p>
-            <p style={{ whiteSpace: "pre-wrap" }}>{aiAnswer}</p>
+            <ul style={{ marginTop: "8px", paddingLeft: "20px", lineHeight: 1.6 }}>
+              <li>Cross-book semantic search</li>
+              <li>AI-powered Q&A (Candle integration planned)</li>
+              <li>Automatic note generation (in development)</li>
+            </ul>
           </div>
-        )}
-      </div>
-
-      <div
-        style={{
-          marginTop: "30px",
-          padding: "15px",
-          backgroundColor: "#2a2a2a",
-          borderRadius: "4px",
-          fontSize: "0.9em",
-          color: "#888",
-        }}
-      >
-        <p>
-          ℹ️ <strong>AI機能について</strong>
-        </p>
-        <ul style={{ marginTop: "10px", paddingLeft: "20px" }}>
-          <li>複数の技術書から関連情報を横断検索</li>
-          <li>AIによる質問応答（今後、Candleによる高度な推論機能を追加予定）</li>
-          <li>読書ノートの自動生成（開発中）</li>
-        </ul>
+        </div>
       </div>
     </div>
   );
